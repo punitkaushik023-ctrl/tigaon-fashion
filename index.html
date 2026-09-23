@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tigaon Fashion | Men's Clothing</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ================= HEADER ================= -->
+<header>
+    <div class="logo">
+        👔 Tigaon Fashion
+    </div>
+    <p>Men's Clothing • Tigaon, Faridabad</p>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <a href="#cart">
+            🛒 Cart
+            <span id="cart-count">0</span>
+        </a>
+        <a href="#wishlist">
+            ❤️ Wishlist
+            <span id="wishlist-count">0</span>
+        </a>
+        <a href="#contact">Contact</a>
+    </nav>
+</header>
+<!-- ================= HERO ================= -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <p class="small-title">
+            ✨ NEW COLLECTION
+        </p>
+        <h1>
+            Upgrade Your Style
+        </h1>
+        <p>
+            Stylish shirts and pants for
+            everyday and formal looks.
+        </p>
+        <button onclick="goToProducts()">
+            Shop Now
+        </button>
+    </div>
+</section>
+<main>
+<!-- ================= SEARCH ================= -->
+<section class="search-section">
+    <input
+        type="text"
+        id="search"
+        placeholder="🔍 Search shirts, pants..."
+    >
+</section>
+<!-- ================= FILTER ================= -->
+<section class="categories">
+    <button onclick="filterCategory('All')">
+        All
+    </button>
+    <button onclick="filterCategory('Shirts')">
+        👕 Shirts
+    </button>
+    <button onclick="filterCategory('Pants')">
+        👖 Pants
+    </button>
+</section>
+<!-- ================= PRODUCTS ================= -->
+<section id="products">
+    <div class="section-heading">
+        <h2>Our Collection</h2>
+        <p>
+            Choose your favourite style
+        </p>
+    </div>
+    <div id="product-list"></div>
+</section>
+<!-- ================= WISHLIST ================= -->
+<section id="wishlist" class="wishlist-section">
+    <h2>❤️ My Wishlist</h2>
+    <div id="wishlist-items">
+        <p>Your wishlist is empty.</p>
+    </div>
+</section>
+<!-- ================= CART ================= -->
+<section class="cart" id="cart">
+    <h2>
+        🛒 Your Cart
+        <span class="cart-title-count">
+            (<span id="cart-count-2">0</span>)
+        </span>
+    </h2>
+    <div id="cart-items">
+        <p>
+            Your cart is empty.
+        </p>
+    </div>
+    <div class="cart-summary">
+        <p>
+            Subtotal:
+            ₹<span id="cart-subtotal">0</span>
+        </p>
+        <p>
+            Discount:
+            ₹<span id="cart-discount">0</span>
+        </p>
+        <h3>
+            Total:
+            ₹<span id="cart-total">0</span>
+        </h3>
+    </div>
+    <button
+        class="whatsapp-order"
+        onclick="sendOrder()"
+    >
+        💬 Order on WhatsApp
+    </button>
+    <button
+        class="clear-cart"
+        onclick="clearCart()"
+    >
+        🗑️ Clear Cart
+    </button>
+</section>
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+    <h2>📍 Visit Our Shop</h2>
+    <div class="address-box">
+        <h3>
+            🏪 Tigaon Fashion
+        </h3>
+        <p>
+            Tigaon, Faridabad, Haryana
+        </p>
+        <button
+            class="map-button"
+            onclick="openMaps()"
+        >
+            📍 Open in Google Maps
+        </button>
+    </div>
+    <div class="contact-box">
+        <h3>
+            📞 Contact Us
+        </h3>
+        <p>
+            Have a question about our clothes?
+        </p>
+        <button onclick="openWhatsApp()">
+            💬 WhatsApp Us
+        </button>
+    </div>
+</section>
+</main>
+<!-- ================= IMAGE ZOOM ================= -->
+<div
+    id="image-modal"
+    class="image-modal"
+    onclick="closeImage()"
+>
+    <span class="close-image">
+        ×
+    </span>
+    <img
+        id="zoomed-image"
+        src=""
+        alt="Product"
+    >
+</div>
+<!-- ================= FOOTER ================= -->
+<footer>
+    <h3>
+        👔 Tigaon Fashion
+    </h3>
+    <p>
+        Stylish • Comfortable • Affordable
+    </p>
+    <p>
+        © 2026 Tigaon Fashion
+    </p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
