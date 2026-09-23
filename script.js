@@ -1,7 +1,5 @@
-/* =========================================
-   PRODUCTS
-========================================= */
 const products = [
+
     {
         id: 1,
         name: "Formal Cloth",
@@ -11,6 +9,7 @@ const products = [
         description: "Smart formal wear for a clean and classic look.",
         rating: 4.5
     },
+
     {
         id: 2,
         name: "Shirt for Men",
@@ -20,6 +19,7 @@ const products = [
         description: "Comfortable men's shirt for everyday wear.",
         rating: 4.3
     },
+
     {
         id: 3,
         name: "White Shirt",
@@ -29,6 +29,7 @@ const products = [
         description: "Classic white shirt for formal and casual occasions.",
         rating: 4.7
     },
+
     {
         id: 4,
         name: "Decent Shirt for Men",
@@ -38,6 +39,7 @@ const products = [
         description: "Simple and stylish shirt for men.",
         rating: 4.4
     },
+
     {
         id: 5,
         name: "Printed Shirt",
@@ -47,6 +49,7 @@ const products = [
         description: "Trendy printed shirt for a stylish casual look.",
         rating: 4.6
     },
+
     {
         id: 6,
         name: "Blue Shirt",
@@ -56,6 +59,7 @@ const products = [
         description: "Stylish blue shirt for everyday fashion.",
         rating: 4.5
     },
+
     {
         id: 7,
         name: "Sky Blue Pant",
@@ -65,6 +69,7 @@ const products = [
         description: "Comfortable sky blue pants with a modern look.",
         rating: 4.4
     },
+
     {
         id: 8,
         name: "Formal Pant",
@@ -74,6 +79,7 @@ const products = [
         description: "Classic formal pants for office and occasions.",
         rating: 4.6
     },
+
     {
         id: 9,
         name: "Green Bellbottom",
@@ -83,510 +89,741 @@ const products = [
         description: "Trendy green bellbottom pants with a stylish look.",
         rating: 4.5
     }
+
 ];
-/* =========================================
-   CART + WISHLIST
-========================================= */
+
+
 let cart = [];
 let wishlist = [];
-/* =========================================
-   ELEMENTS
-========================================= */
-const productContainer =
-    document.getElementById("product-list");
-const searchBox =
-    document.getElementById("search");
-/* =========================================
-   SHOP NOW
-========================================= */
+
+let currentCategory = "All";
+
+
+const productList = document.getElementById("product-list");
+const searchInput = document.getElementById("search");
+
+
+// SHOP NOW
+
 function goToProducts() {
+
     document
         .getElementById("products")
         .scrollIntoView({
             behavior: "smooth"
         });
+
 }
-/* =========================================
-   WHATSAPP
-========================================= */
+
+
+// WHATSAPP NUMBER
+
 function openWhatsApp() {
-    const phoneNumber =
-        "919354047607";
-    const message =
-        "Hello, I want information about your clothing products.";
-    const url =
-        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+
+    window.open(
+        "https://wa.me/919354047607",
+        "_blank"
+    );
+
 }
-/* =========================================
-   GOOGLE MAPS
-========================================= */
+
+
+// GOOGLE MAPS
+
 function openMaps() {
-    const address =
-        "Tigaon, Faridabad, Haryana";
-    const url =
-        `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-    window.open(url, "_blank");
+
+    window.open(
+        "https://www.google.com/maps/search/?api=1&query=Tigaon+Faridabad+Haryana",
+        "_blank"
+    );
+
 }
-/* =========================================
-   ADD TO CART
-========================================= */
+
+
+// ADD TO CART
+
 function addToCart(productId) {
-    const product =
-        products.find(
-            item => item.id === productId
-        );
-    if (!product) {
-        return;
-    }
-    const size =
+
+    const product = products.find(
+        p => p.id === productId
+    );
+
+    const sizeElement =
         document.getElementById(
             `size-${productId}`
-        ).value;
-    const existing =
-        cart.find(
-            item =>
-                item.id === productId &&
-                item.size === size
         );
+
+    const size = sizeElement.value;
+
+    const existing = cart.find(
+        item =>
+            item.id === productId &&
+            item.size === size
+    );
+
     if (existing) {
+
         existing.quantity++;
+
     } else {
+
         cart.push({
-            ...product,
+
+            id: product.id,
+            name: product.name,
+            price: product.price,
             size: size,
             quantity: 1
+
         });
+
     }
+
     updateCart();
-    alert(
-        `${product.name} (${size}) added to cart!`
-    );
+
+    alert("Product added to cart 🛒");
+
 }
-/* =========================================
-   INCREASE
-========================================= */
+
+
+// CART QUANTITY
+
 function increaseQuantity(index) {
+
     cart[index].quantity++;
+
     updateCart();
+
 }
-/* =========================================
-   DECREASE
-========================================= */
+
+
 function decreaseQuantity(index) {
+
     if (cart[index].quantity > 1) {
+
         cart[index].quantity--;
+
     } else {
+
         cart.splice(index, 1);
+
     }
+
     updateCart();
+
 }
-/* =========================================
-   DISPLAY PRODUCTS
-========================================= */
-function displayProducts(items) {
-    productContainer.innerHTML = "";
-    if (items.length === 0) {
-        productContainer.innerHTML = `
-            <div class="no-products">
-                <h3>
-                    😕 Product not found
-                </h3>
-                <p>
-                    Try another product name.
-                </p>
-            </div>
-        `;
+
+
+// DISPLAY PRODUCTS
+
+function displayProducts(list) {
+
+    productList.innerHTML = "";
+
+    if (list.length === 0) {
+
+        productList.innerHTML =
+            "<p>No products found.</p>";
+
         return;
+
     }
-    items.forEach(product => {
-        const card =
-            document.createElement("div");
-        card.className =
-            "product-card";
-        const isLiked =
+
+
+    list.forEach(product => {
+
+        const liked =
             wishlist.includes(product.id);
-        const stars =
-            "⭐".repeat(
-                Math.round(product.rating)
-            );
+
+
+        const card = document.createElement("div");
+
+        card.className = "product-card";
+
+
         card.innerHTML = `
-            <div class="product-image-box">
+
+            <div class="product-image">
+
                 <img
                     src="images/${product.image}"
                     alt="${product.name}"
-                    onclick="zoomImage('images/${product.image}')"
-                    onerror="this.style.display='none'"
+                    onclick="zoomImage(this.src)"
                 >
-                <span class="category-tag">
-                    ${product.category}
-                </span>
-                <button
-                    class="wishlist-button"
-                    onclick="toggleWishlist(${product.id})"
-                >
-                    ${isLiked ? "❤️" : "🤍"}
-                </button>
+
             </div>
-            <div class="product-info">
-                <h3>
-                    ${product.name}
-                </h3>
-                <div class="rating">
-                    ${stars}
-                    <span>
-                        ${product.rating}
-                    </span>
-                </div>
-                <p class="description">
-                    ${product.description}
-                </p>
-                <label class="size-label">
-                    Select Size:
-                </label>
-                <select
-                    id="size-${product.id}"
-                    class="size-select"
-                >
-                    <option value="S">
-                        S
-                    </option>
-                    <option value="M" selected>
-                        M
-                    </option>
-                    <option value="L">
-                        L
-                    </option>
-                    <option value="XL">
-                        XL
-                    </option>
-                    <option value="XXL">
-                        XXL
-                    </option>
-                </select>
-                <div class="product-bottom">
-                    <span class="price">
-                        ₹${product.price}
-                    </span>
-                    <button
-                        onclick="addToCart(${product.id})"
-                    >
-                        🛒 Add
-                    </button>
-                </div>
-            </div>
+
+
+            <button
+                class="wishlist-btn"
+                onclick="toggleWishlist(${product.id})"
+            >
+                ${liked ? "❤️" : "♡"}
+            </button>
+
+
+            <h3>${product.name}</h3>
+
+            <p>⭐ ${product.rating}</p>
+
+            <p>${product.description}</p>
+
+
+            <label>Size:</label>
+
+            <select id="size-${product.id}">
+
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+
+            </select>
+
+
+            <h3>₹${product.price}</h3>
+
+
+            <button
+                onclick="addToCart(${product.id})"
+            >
+                Add to Cart
+            </button>
+
         `;
-        productContainer.appendChild(card);
+
+
+        productList.appendChild(card);
+
     });
+
 }
-/* =========================================
-   WISHLIST
-========================================= */
+
+
+// WISHLIST
+
 function toggleWishlist(productId) {
-    const index =
-        wishlist.indexOf(productId);
-    if (index === -1) {
-        wishlist.push(productId);
+
+    if (wishlist.includes(productId)) {
+
+        wishlist =
+            wishlist.filter(
+                id => id !== productId
+            );
+
     } else {
-        wishlist.splice(index, 1);
+
+        wishlist.push(productId);
+
     }
+
     updateWishlist();
+
     displayProducts(
         getCurrentlyDisplayedProducts()
     );
+
 }
-/* =========================================
-   CURRENT PRODUCTS
-========================================= */
+
+
 function getCurrentlyDisplayedProducts() {
-    const searchText =
-        searchBox.value.toLowerCase();
-    if (!searchText) {
-        return products;
-    }
-    return products.filter(product =>
-        product.name
-            .toLowerCase()
-            .includes(searchText)
-    );
-}
-/* =========================================
-   UPDATE WISHLIST
-========================================= */
-function updateWishlist() {
-    const wishlistItems =
-        document.getElementById("wishlist-items");
-    const wishlistCount =
-        document.getElementById("wishlist-count");
-    wishlistCount.textContent =
-        wishlist.length;
-    wishlistItems.innerHTML = "";
-    if (wishlist.length === 0) {
-        wishlistItems.innerHTML = `
-            <p>
-                Your wishlist is empty.
-            </p>
-        `;
-        return;
-    }
-    wishlist.forEach(id => {
-        const product =
-            products.find(
-                item => item.id === id
+
+    let list = products;
+
+
+    if (currentCategory !== "All") {
+
+        list =
+            list.filter(
+                product =>
+                    product.category ===
+                    currentCategory
             );
-        if (!product) {
-            return;
-        }
+
+    }
+
+
+    const searchText =
+        searchInput.value
+            .toLowerCase()
+            .trim();
+
+
+    if (searchText) {
+
+        list =
+            list.filter(
+                product =>
+                    product.name
+                        .toLowerCase()
+                        .includes(searchText)
+            );
+
+    }
+
+
+    return list;
+
+}
+
+
+function updateWishlist() {
+
+    const wishlistList =
+        document.getElementById(
+            "wishlist-list"
+        );
+
+
+    const wishlistProducts =
+        products.filter(
+            product =>
+                wishlist.includes(product.id)
+        );
+
+
+    wishlistList.innerHTML = "";
+
+
+    if (wishlistProducts.length === 0) {
+
+        wishlistList.innerHTML =
+            "<p>Your wishlist is empty ❤️</p>";
+
+    }
+
+
+    wishlistProducts.forEach(product => {
+
         const item =
             document.createElement("div");
+
         item.className =
-            "wishlist-item";
+            "product-card";
+
+
         item.innerHTML = `
+
             <img
                 src="images/${product.image}"
                 alt="${product.name}"
             >
-            <div>
-                <strong>
-                    ${product.name}
-                </strong>
-                <p>
-                    ₹${product.price}
-                </p>
-            </div>
+
+            <h3>${product.name}</h3>
+
+            <p>₹${product.price}</p>
+
             <button
-                onclick="toggleWishlist(${product.id})"
+                onclick="addToCart(${product.id})"
             >
-                Remove
+                Add to Cart
             </button>
+
         `;
-        wishlistItems.appendChild(item);
+
+
+        wishlistList.appendChild(item);
+
     });
+
+
+    document.getElementById(
+        "wishlist-count"
+    ).textContent = wishlist.length;
+
 }
-/* =========================================
-   UPDATE CART
-========================================= */
+
+
+// UPDATE CART
+
 function updateCart() {
+
     const cartItems =
-        document.getElementById("cart-items");
-    const subtotalElement =
-        document.getElementById("cart-subtotal");
-    const discountElement =
-        document.getElementById("cart-discount");
-    const totalElement =
-        document.getElementById("cart-total");
-    const cartCount =
-        document.getElementById("cart-count");
-    const cartCount2 =
-        document.getElementById("cart-count-2");
-    cartItems.innerHTML = "";
-    let totalQuantity = 0;
-    cart.forEach(item => {
-        totalQuantity +=
-            item.quantity;
-    });
-    cartCount.textContent =
-        totalQuantity;
-    cartCount2.textContent =
-        totalQuantity;
-    if (cart.length === 0) {
-        cartItems.innerHTML = `
-            <div class="empty-cart">
-                <div class="empty-cart-icon">
-                    🛒
-                </div>
-                <p>
-                    Your cart is empty.
-                </p>
-                <p>
-                    Add some clothes to your cart!
-                </p>
-            </div>
-        `;
-        subtotalElement.textContent = "0";
-        discountElement.textContent = "0";
-        totalElement.textContent = "0";
-        return;
-    }
-    let subtotal = 0;
-    cart.forEach((product, index) => {
-        const itemTotal =
-            product.price *
-            product.quantity;
-        subtotal += itemTotal;
-        const item =
-            document.createElement("div");
-        item.className =
-            "cart-item";
-        item.innerHTML = `
-            <div class="cart-product-info">
-                <strong>
-                    ${product.name}
-                </strong>
-                <small>
-                    Size: ${product.size}
-                </small>
-                <small>
-                    ₹${product.price} ×
-                    ${product.quantity}
-                </small>
-                <strong>
-                    Item Total:
-                    ₹${itemTotal}
-                </strong>
-            </div>
-            <div class="quantity-buttons">
-                <button
-                    onclick="decreaseQuantity(${index})"
-                >
-                    −
-                </button>
-                <span>
-                    ${product.quantity}
-                </span>
-                <button
-                    onclick="increaseQuantity(${index})"
-                >
-                    +
-                </button>
-            </div>
-        `;
-        cartItems.appendChild(item);
-    });
-    /* 10% DISCOUNT ABOVE ₹500 */
-    let discount = 0;
-    if (subtotal >= 500) {
-        discount =
-            Math.round(
-                subtotal * 0.10
-            );
-    }
-    const total =
-        subtotal - discount;
-    subtotalElement.textContent =
-        subtotal;
-    discountElement.textContent =
-        discount;
-    totalElement.textContent =
-        total;
-}
-/* =========================================
-   CLEAR CART
-========================================= */
-function clearCart() {
-    cart = [];
-    updateCart();
-}
-/* =========================================
-   WHATSAPP ORDER
-========================================= */
-function sendOrder() {
-    if (cart.length === 0) {
-        alert(
-            "Please add a product to your cart first."
+        document.getElementById(
+            "cart-items"
         );
-        return;
-    }
-    const phoneNumber =
-        "919354047607";
-    let message =
-        "Hello, I want to order:\n\n";
+
+
+    cartItems.innerHTML = "";
+
+
     let subtotal = 0;
-    cart.forEach((product, index) => {
+
+
+    cart.forEach((item, index) => {
+
         const itemTotal =
-            product.price *
-            product.quantity;
+            item.price *
+            item.quantity;
+
+
         subtotal += itemTotal;
-        message +=
-            `${index + 1}. ${product.name}\n`;
-        message +=
-            `Size: ${product.size}\n`;
-        message +=
-            `Quantity: ${product.quantity}\n`;
-        message +=
-            `Price: ₹${itemTotal}\n\n`;
+
+
+        const div =
+            document.createElement("div");
+
+
+        div.className = "cart-item";
+
+
+        div.innerHTML = `
+
+            <h3>${item.name}</h3>
+
+            <p>
+                Size: ${item.size}
+            </p>
+
+            <p>
+                ₹${item.price}
+            </p>
+
+            <button
+                onclick="decreaseQuantity(${index})"
+            >
+                −
+            </button>
+
+            <span>
+                ${item.quantity}
+            </span>
+
+            <button
+                onclick="increaseQuantity(${index})"
+            >
+                +
+            </button>
+
+        `;
+
+
+        cartItems.appendChild(div);
+
     });
+
+
     let discount = 0;
+
+
     if (subtotal >= 500) {
+
         discount =
             Math.round(
                 subtotal * 0.10
             );
+
     }
+
+
     const total =
         subtotal - discount;
-    message +=
-        `Subtotal: ₹${subtotal}\n`;
-    message +=
-        `Discount: ₹${discount}\n`;
-    message +=
-        `Total: ₹${total}\n\n`;
-    message +=
-        "Please confirm my order.";
-    const url =
-        `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
+
+
+    document.getElementById(
+        "subtotal"
+    ).textContent = subtotal;
+
+
+    document.getElementById(
+        "discount"
+    ).textContent = discount;
+
+
+    document.getElementById(
+        "total"
+    ).textContent = total;
+
+
+    document.getElementById(
+        "cart-count"
+    ).textContent =
+        cart.reduce(
+            (sum, item) =>
+                sum + item.quantity,
+            0
+        );
+
 }
-/* =========================================
-   SEARCH
-========================================= */
-searchBox.addEventListener(
+
+
+// CLEAR CART
+
+function clearCart() {
+
+    cart = [];
+
+    updateCart();
+
+}
+
+
+// CATEGORY FILTER
+
+function filterCategory(category) {
+
+    currentCategory = category;
+
+    displayProducts(
+        getCurrentlyDisplayedProducts()
+    );
+
+}
+
+
+// SEARCH
+
+searchInput.addEventListener(
     "input",
     function () {
-        const searchText =
-            searchBox.value.toLowerCase();
-        const filteredProducts =
-            products.filter(product =>
-                product.name
-                    .toLowerCase()
-                    .includes(searchText)
-            );
+
         displayProducts(
-            filteredProducts
+            getCurrentlyDisplayedProducts()
         );
+
     }
 );
-/* =========================================
-   CATEGORY FILTER
-========================================= */
-function filterCategory(category) {
-    if (category === "All") {
-        displayProducts(products);
-        return;
-    }
-    const filteredProducts =
-        products.filter(product =>
-            product.category === category
+
+
+// OPEN ORDER FORM
+
+function openOrderForm() {
+
+    if (cart.length === 0) {
+
+        alert(
+            "Please add a product to cart first."
         );
-    displayProducts(
-        filteredProducts
-    );
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "order-form"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "order-form"
+    ).scrollIntoView({
+        behavior: "smooth"
+    });
+
 }
-/* =========================================
-   IMAGE ZOOM
-========================================= */
-function zoomImage(imageSource) {
+
+
+// CLOSE ORDER FORM
+
+function closeOrderForm() {
+
+    document.getElementById(
+        "order-form"
+    ).style.display = "none";
+
+}
+
+
+// SEND ORDER
+
+function sendOrder(event) {
+
+    event.preventDefault();
+
+
+    const customerName =
+        document.getElementById(
+            "customer-name"
+        ).value.trim();
+
+
+    const customerPhone =
+        document.getElementById(
+            "customer-phone"
+        ).value.trim();
+
+
+    const customerAddress =
+        document.getElementById(
+            "customer-address"
+        ).value.trim();
+
+
+    const paymentMethod =
+        document.getElementById(
+            "payment-method"
+        ).value;
+
+
+    if (!customerName ||
+        !customerPhone ||
+        !customerAddress ||
+        !paymentMethod) {
+
+        alert(
+            "Please fill all details."
+        );
+
+        return;
+
+    }
+
+
+    let message =
+        "🛍️ *NEW ORDER - TIGAOON FASHION*%0A%0A";
+
+
+    message +=
+        "👤 *Customer:* " +
+        encodeURIComponent(
+            customerName
+        ) +
+        "%0A";
+
+
+    message +=
+        "📞 *Phone:* " +
+        encodeURIComponent(
+            customerPhone
+        ) +
+        "%0A";
+
+
+    message +=
+        "📍 *Address:* " +
+        encodeURIComponent(
+            customerAddress
+        ) +
+        "%0A";
+
+
+    message +=
+        "💳 *Payment:* " +
+        encodeURIComponent(
+            paymentMethod
+        ) +
+        "%0A%0A";
+
+
+    message +=
+        "🛒 *ORDER DETAILS*%0A";
+
+
+    let subtotal = 0;
+
+
+    cart.forEach(item => {
+
+        const itemTotal =
+            item.price *
+            item.quantity;
+
+
+        subtotal += itemTotal;
+
+
+        message +=
+            "• " +
+            encodeURIComponent(
+                item.name
+            ) +
+            " | Size: " +
+            encodeURIComponent(
+                item.size
+            ) +
+            " | Qty: " +
+            item.quantity +
+            " | ₹" +
+            itemTotal +
+            "%0A";
+
+    });
+
+
+    let discount = 0;
+
+
+    if (subtotal >= 500) {
+
+        discount =
+            Math.round(
+                subtotal * 0.10
+            );
+
+    }
+
+
+    const total =
+        subtotal - discount;
+
+
+    message +=
+        "%0A💰 Subtotal: ₹" +
+        subtotal;
+
+
+    message +=
+        "%0A🎁 Discount: ₹" +
+        discount;
+
+
+    message +=
+        "%0A💵 *Total: ₹" +
+        total +
+        "*";
+
+
+    const whatsappURL =
+        "https://wa.me/919354047607?text=" +
+        message;
+
+
+    window.open(
+        whatsappURL,
+        "_blank"
+    );
+
+}
+
+
+// IMAGE ZOOM
+
+function zoomImage(src) {
+
     const modal =
         document.getElementById(
             "image-modal"
         );
-    const zoomedImage =
+
+
+    const image =
         document.getElementById(
             "zoomed-image"
         );
-    zoomedImage.src =
-        imageSource;
-    modal.style.display =
-        "flex";
+
+
+    image.src = src;
+
+    modal.style.display = "flex";
+
 }
+
+
 function closeImage() {
+
     document.getElementById(
         "image-modal"
     ).style.display = "none";
+
 }
-/* =========================================
-   START
-========================================= */
+
+
+// INITIAL LOAD
+
 displayProducts(products);
+
 updateCart();
+
 updateWishlist();
